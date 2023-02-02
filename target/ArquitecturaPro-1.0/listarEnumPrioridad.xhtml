@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Listar EnumPrioridads</title>
+    </h:head>
+    <h:body>
+        <ui:include src="header.xhtml" />
+        <p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">
+            <f:facet name="start">
+                <h:graphicImage library="images" name="ajaxloading.gif" />
+            </f:facet>
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:form prependId="false" id="form">
+
+            <p:growl id="messages" showDetail="true" />
+            <p:messages />
+
+            <p:dataTable 
+                id="enumPrioridades" 
+                var="enumPrioridad" 
+                value="#{enumPrioridadBean.enumPrioridades}" 
+                editable="true" 
+                rowKey="#{enumPrioridad.idenumPrioridad}"
+                selection="#{enumPrioridadBean.enumPrioridadSeleccionada}" 
+                selectionMode="single">
+
+                <f:facet name="header">  
+                    Lista de EnumPrioridads  
+                </f:facet>
+
+                <p:column headerText="Nivel">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{enumPrioridad.nivel}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{enumPrioridad.nivel}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Regresar" action="index" />
+                    <p:spacer height="5px;"/>
+                    <p:commandButton value="Agregar" actionListener="#{enumPrioridadBean.reiniciarEnumPrioridadSeleccionada}" oncomplete="PF('enumPrioridadDialogo').show();" update="enumPrioridades">
+                        <p:ajax event="dialogReturn" update="enumPrioridades"/>
+                    </p:commandButton>
+                </f:facet>
+
+                <p:column headerText="Opciones" style="width:50px">
+                    <p:rowEditor />
+                </p:column>
+
+                <p:ajax event="rowEdit" listener="#{enumPrioridadBean.editListener}">
+                </p:ajax>
+            </p:dataTable>
+
+
+
+            <p:contextMenu for="enumPrioridades">
+                <p:menuitem value="Eliminar" update="enumPrioridades" icon="ui-icon-close" actionListener="#{enumPrioridadBean.eliminarEnumPrioridad}" ajax="false"/>
+            </p:contextMenu>
+        </h:form>
+
+        <h:form id="dialogoForm" prependId="false">
+            <p:dialog header="Agregar EnumPrioridad" widgetVar="enumPrioridadDialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="enumPrioridadDetalle" style="text-align:center;">
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+
+                        <h:outputText value="Nivel" />
+                        <h:inputText value="#{enumPrioridadBean.enumPrioridadSeleccionada.nivel}" />
+
+                        <f:facet name="footer">
+                            <h:commandButton value="Agregar" actionListener="#{enumPrioridadBean.agregarEnumPrioridad}" />
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        <h1></h1>
+        <h1></h1>
+        <h1></h1>
+        <ui:include src="footer.xhtml" />
+    </h:body>
+
+</html>

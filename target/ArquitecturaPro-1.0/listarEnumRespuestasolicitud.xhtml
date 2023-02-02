@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Listar Respuesta Solicitudes</title>
+    </h:head>
+    <h:body>
+        <ui:include src="header.xhtml" />
+        <p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">
+            <f:facet name="start">
+                <h:graphicImage library="images" name="ajaxloading.gif" />
+            </f:facet>
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:form prependId="false" id="form">
+
+            <p:growl id="messages" showDetail="true" />
+            <p:messages />
+
+            <p:dataTable 
+                id="respuestasolicitudes" 
+                var="respuestasolicitud" 
+                value="#{respuestasolicitudBean.respuestasolicitudes}" 
+                editable="true" 
+                rowKey="#{respuestasolicitud.idrespuestasolicitud}"
+                selection="#{respuestasolicitudBean.respuestasolicitudSeleccionada}" 
+                selectionMode="single">
+
+                <f:facet name="header">  
+                    Lista de Solicitudes  
+                </f:facet>
+
+                <p:column headerText="Nombre Aprobante">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{respuestasolicitud.nombreaprobante}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{respuestasolicitud.nombreaprobante}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Cargo Aprobante">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{respuestasolicitud.cargoaprobante}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{respuestasolicitud.cargoaprobante}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Descripción">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{respuestasolicitud.descripcion}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{respuestasolicitud.descripcion}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Técnico">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{respuestasolicitud.tecnico.codigotecnico}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{respuestasolicitud.tecnico.codigotecnico}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Respuesta">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{respuestasolicitud.respuesta == 0 ? 'Rechazado' : 'Aprobado'}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{respuestasolicitud.respuesta}">
+                                <f:selectItem itemLabel="Rechazar" itemValue="0"/>
+                                <f:selectItem itemLabel="Aprobar" itemValue="1"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Solicitud">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{respuestasolicitud.solicitud.rfc}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{respuestasolicitud.solicitud.rfc}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Fecha de aprobación">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{respuestasolicitud.fecha}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:calendar id="fecha" value="#{respuestasolicitud.fecha}" 
+                                    showOn="button" pattern="yyyy-MM-dd" >
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </p:calendar>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Empresa Externa">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{respuestasolicitud.empresaexterna.nombre}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{respuestasolicitud.empresaexterna.nombre}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Regresar" action="index" />
+                    <p:spacer height="5px;"/>
+                    <p:commandButton value="Agregar" actionListener="#{respuestasolicitudBean.reiniciarRespuestasolicitudSeleccionada}" oncomplete="PF('respuestasolicitudDialogo').show();" update="respuestasolicitudes">
+                        <p:ajax event="dialogReturn" update="respuestasolicitudes"/>
+                    </p:commandButton>
+                </f:facet>
+
+                <p:column headerText="Opciones" style="width: auto">
+                    <p:rowEditor />
+                </p:column>
+
+                <p:ajax event="rowEdit" listener="#{respuestasolicitudBean.editListener}">
+                </p:ajax>
+            </p:dataTable>
+
+
+
+            <p:contextMenu for="respuestasolicitudes">
+                <p:menuitem value="Eliminar" update="respuestasolicitudes" icon="ui-icon-close" actionListener="#{respuestasolicitudBean.eliminarRespuestasolicitud()}" ajax="false"/>
+            </p:contextMenu>
+        </h:form>
+
+        <h:form id="dialogoForm" prependId="false">
+            <p:dialog header="Agregar Respuesta Solicitud" widgetVar="respuestasolicitudDialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="respuestasolicitudDetalle" style="text-align:center;">
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+
+                        <h:outputText value="Nombre Aprobante" />
+                        <h:inputText value="#{respuestasolicitudBean.respuestasolicitudSeleccionada.nombreaprobante}" />
+
+                        <h:outputText value="Cargo Aprobante" />
+                        <h:inputText value="#{respuestasolicitudBean.respuestasolicitudSeleccionada.cargoaprobante}" />
+
+                        <h:outputText value="Descripción" />
+                        <h:inputText value="#{respuestasolicitudBean.respuestasolicitudSeleccionada.descripcion}" />
+
+                        <h:outputText value="Técnico" />
+                        <h:selectOneMenu value="#{respuestasolicitudBean.respuestasolicitudSeleccionada.idtecnico}">
+                            <f:selectItems value="#{tecnicoBean.tecnicos}" var="tecnico"
+                                           itemLabel="#{tecnico.codigotecnico}" itemValue="#{tecnico.idtecnico}"/>
+                        </h:selectOneMenu>  
+
+                        <h:outputText value="Respuesta" />
+                        <h:selectOneMenu value="#{respuestasolicitudBean.respuestasolicitudSeleccionada.respuesta}">
+                            <f:selectItem itemLabel="Rechazar" itemValue="0"/>
+                            <f:selectItem itemLabel="Aprobar" itemValue="1"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Solicitud" />
+                        <h:selectOneMenu value="#{respuestasolicitudBean.respuestasolicitudSeleccionada.idsolicitud}">
+                            <f:selectItems value="#{solicitudBean.solicitudes}" var="solicitud"
+                                           itemLabel="#{solicitud.rfc}" itemValue="#{solicitud.idsolicitud}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Fecha" />
+                        <p:calendar id="fecha" value="#{respuestasolicitudBean.respuestasolicitudSeleccionada.fecha}" 
+                                    showOn="button" pattern="yyyy-MM-dd" >
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </p:calendar>
+
+                        <h:outputText value="Empresa Externa" />
+                        <h:selectOneMenu value="#{respuestasolicitudBean.respuestasolicitudSeleccionada.idempresaexterna}">
+                            <f:selectItems value="#{empresaexternaBean.empresaexternas}" var="empresaexterna"
+                                           itemLabel="#{empresaexterna.nombre}" itemValue="#{empresaexterna.idempresaexterna}"/>
+                        </h:selectOneMenu>
+
+                        <f:facet name="footer">
+                            <h:commandButton value="Agregar" actionListener="#{respuestasolicitudBean.agregarRespuestasolicitud}" />
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        <h1></h1>
+        <h1></h1>
+        <h1></h1>
+        <ui:include src="footer.xhtml" />
+    </h:body>
+
+</html>

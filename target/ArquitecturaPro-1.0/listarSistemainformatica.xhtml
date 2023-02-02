@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Listar Sistemainformaticas</title>
+    </h:head>
+    <h:body>
+        <ui:include src="header.xhtml" />
+        <p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">
+            <f:facet name="start">
+                <h:graphicImage library="images" name="ajaxloading.gif" />
+            </f:facet>
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:form prependId="false" id="form">
+
+            <p:growl id="messages" showDetail="true" />
+            <p:messages />
+
+            <p:dataTable 
+                id="sistemainformaticas" 
+                var="sistemainformatica" 
+                value="#{sistemainformaticaBean.sistemainformaticas}" 
+                editable="true" 
+                rowKey="#{sistemainformatica.idsistemainformatica}"
+                selection="#{sistemainformaticaBean.sistemainformaticaSeleccionada}" 
+                selectionMode="single">
+
+                <f:facet name="header">  
+                    Lista de Sistemainformaticas  
+                </f:facet>
+
+                <p:column headerText="Nombre del sistema">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{sistemainformatica.nombredelsistema}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{sistemainformatica.nombredelsistema}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Descripción">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{sistemainformatica.descripcion}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{sistemainformatica.descripcion}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Valor">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{sistemainformatica.valor}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{sistemainformatica.valor}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <f:facet name="footer">
+                    <p:commandButton value="Regresar" action="index" />
+                    <p:spacer height="5px;"/>
+                    <p:commandButton value="Agregar" actionListener="#{sistemainformaticaBean.reiniciarSistemainformaticaSeleccionada}" oncomplete="PF('sistemainformaticaDialogo').show();" update="sistemainformaticas">
+                        <p:ajax event="dialogReturn" update="sistemainformaticas"/>
+                    </p:commandButton>
+                </f:facet>
+
+                <p:column headerText="Opciones" style="width: auto">
+                    <p:rowEditor />
+                </p:column>
+
+                <p:ajax event="rowEdit" listener="#{sistemainformaticaBean.editListener}">
+                </p:ajax>
+            </p:dataTable>
+
+
+
+            <p:contextMenu for="sistemainformaticas">
+                <p:menuitem value="Eliminar" update="sistemainformaticas" icon="ui-icon-close" actionListener="#{sistemainformaticaBean.eliminarSistemainformatica}" ajax="false"/>
+            </p:contextMenu>
+        </h:form>
+
+        <h:form id="dialogoForm" prependId="false">
+            <p:dialog header="Agregar Sistemainformatica" widgetVar="sistemainformaticaDialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="sistemainformaticaDetalle" style="text-align:center;">
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+                        <h:outputText value="Nombre del Sistema" />
+                        <h:inputText value="#{sistemainformaticaBean.sistemainformaticaSeleccionada.nombredelsistema}" />
+
+                        <h:outputText value="Descripción" />
+                        <h:inputText value="#{sistemainformaticaBean.sistemainformaticaSeleccionada.descripcion}" />
+
+                        <h:outputText value="Valor" />
+                        <h:inputText value="#{sistemainformaticaBean.sistemainformaticaSeleccionada.valor}" />
+
+                        <f:facet name="footer">
+                            <h:commandButton value="Agregar" actionListener="#{sistemainformaticaBean.agregarSistemainformatica}" />
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        <h1></h1>
+        <h1></h1>
+        <h1></h1>
+        <ui:include src="footer.xhtml" />
+    </h:body>
+
+</html>

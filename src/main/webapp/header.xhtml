@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Sistema</title>
+        <style>
+            .header {
+                background-color: #219;
+                color: #fff;
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                box-shadow: 0px 2px 4px rgba(0,0,0,0.3);
+            }
+            .header button {
+                background-color: transparent;
+                border: none;
+                color: #fff;
+                padding: 15px;
+                text-transform: uppercase;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                font-size: small;
+            }
+            .header button:hover {
+                background-color: #fff;
+                color: #333;
+            }
+        </style>
+    </h:head>
+
+    <h:body>
+        <div class="header">
+            <h2>Sistema SGA</h2>
+            <h:form>
+                <p:commandButton value="Listar Personas" action="listarPersonas" />
+                <p:commandButton value="Listar Técnicos" action="listarTecnicos" />
+                <p:commandButton value="Listar Usuarios" action="listarUsuarios" />
+                <p:commandButton value="Tipo Requerimientos" action="listarEnumTiporequerimiento" />
+                <p:commandButton value="Sistema Informáticos" action="listarSistemainformatica" />
+                <p:commandButton value="Solicitud" action="listarSolicitud" />
+                <p:commandButton value="Respuesta Solicitud" action="listarEnumRespuestasolicitud" />
+            </h:form>
+        </div>
+    </h:body>
+</html>

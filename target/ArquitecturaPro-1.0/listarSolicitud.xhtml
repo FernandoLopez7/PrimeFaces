@@ -1,0 +1,343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Listar Solicitudes</title>
+    </h:head>
+    <h:body>
+        <ui:include src="header.xhtml" />
+        <p:ajaxStatus style="width:16px;height:16px;" id="ajaxStatusPanel">
+            <f:facet name="start">
+                <h:graphicImage library="images" name="ajaxloading.gif" />
+            </f:facet>
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:form prependId="false" id="form">
+
+            <p:growl id="messages" showDetail="true" />
+            <p:messages />
+
+            <p:dataTable 
+                id="solicitudes" 
+                var="solicitud" 
+                value="#{solicitudBean.solicitudes}" 
+                editable="true" 
+                rowKey="#{solicitud.idsolicitud}"
+                selection="#{solicitudBean.solicitudSeleccionada}" 
+                selectionMode="single">
+
+                <f:facet name="header">  
+                    Lista de Solicitudes  
+                </f:facet>
+
+                <p:column headerText="RFC">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.rfc}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{solicitud.rfc}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Prioridad">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.enumPrioridad.nivel}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{solicitud.enumPrioridad.nivel}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="Tipo Requerimiento">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.enumTiporequerimientos.requerimiento}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{solicitud.enumTiporequerimientos.requerimiento}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Impacto de no atender al cambio">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.impactoencasodenoatenderalcambio}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{solicitud.impactoencasodenoatenderalcambio}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Beneficios">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.beneficiosesperados}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{solicitud.beneficiosesperados}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Sistema Antiguo">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.sistemainformatica.nombredelsistema}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{solicitud.sistemainformatica.nombredelsistema}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Sistema Nuevo">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.sistemainformatica.nombredelsistema}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{solicitud.sistemainformatica.nombredelsistema}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Razón de cambio (Descripción)">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.razoncambio}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{solicitud.razoncambio}" style="width:500px; height:100px;"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Afecta a la DB">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.existeafectaciondeladb == 0 ? 'NO' : 'SI'}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{solicitud.existeafectaciondeladb}">
+                                <f:selectItem itemLabel="NO" itemValue="0"/>
+                                <f:selectItem itemLabel="SI" itemValue="1"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Afecta la información de la DB">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.afectalainformaciondeladb == 0 ? 'NO' : 'SI'}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{solicitud.afectalainformaciondeladb}">
+                                <f:selectItem itemLabel="NO" itemValue="0"/>
+                                <f:selectItem itemLabel="SI" itemValue="1"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Afecta la infraestructura de la DB">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.requiereafectarlaestructuradb == 0 ? 'NO' : 'SI'}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{solicitud.requiereafectarlaestructuradb}">
+                                <f:selectItem itemLabel="NO" itemValue="0"/>
+                                <f:selectItem itemLabel="SI" itemValue="1"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Parte del ciclo de desarrollo">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.requiereserparteciclodesarrollo == 0 ? 'NO' : 'SI'}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{solicitud.requiereserparteciclodesarrollo}">
+                                <f:selectItem itemLabel="NO" itemValue="0"/>
+                                <f:selectItem itemLabel="SI" itemValue="1"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Requiere perfil">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.requiereperfilproyecto == 0 ? 'NO' : 'SI'}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{solicitud.requiereperfilproyecto}">
+                                <f:selectItem itemLabel="NO" itemValue="0"/>
+                                <f:selectItem itemLabel="SI" itemValue="1"/>
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Solicitante">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.usuario.codigousuario}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:outputText value="#{solicitud.usuario.codigousuario}" />
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Fecha">
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{solicitud.fecha}" />
+                        </f:facet>
+                        <f:facet name="input">
+                            <p:calendar id="fecha" value="#{solicitud.fecha}" 
+                                        showOn="button" pattern="yyyy-MM-dd" >
+                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                            </p:calendar>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Regresar" action="index" />
+                    <p:spacer height="5px;"/>
+                    <p:commandButton value="Agregar" actionListener="#{solicitudBean.reiniciarSolicitudSeleccionada}" oncomplete="PF('solicitudDialogo').show();" update="solicitudes">
+                        <p:ajax event="dialogReturn" update="solicitudes"/>
+                    </p:commandButton>
+                </f:facet>
+
+                <p:column headerText="Opciones" style="width: auto">
+                    <p:rowEditor />
+                </p:column>
+
+                <p:ajax event="rowEdit" listener="#{solicitudBean.editListener}">
+                </p:ajax>
+            </p:dataTable>
+
+
+
+            <p:contextMenu for="solicitudes">
+                <p:menuitem value="Eliminar" update="solicitudes" icon="ui-icon-close" actionListener="#{solicitudBean.eliminarSolicitud}" ajax="false"/>
+            </p:contextMenu>
+        </h:form>
+
+        <h:form id="dialogoForm" prependId="false">
+            <p:dialog header="Agregar Solicitud" widgetVar="solicitudDialogo" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                <p:outputPanel id="solicitudDetalle" style="text-align:center;">
+                    <p:panelGrid  columns="2" columnClasses="label,value">
+
+                        <h:outputText value="RFC" />
+                        <h:inputText value="#{solicitudBean.solicitudSeleccionada.rfc}" />
+
+                        <h:outputText value="Prioridad" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.idenumprioridad}">
+                            <f:selectItems value="#{enumPrioridadBean.enumPrioridades}" var="enumPrioridad"
+                                           itemLabel="#{enumPrioridad.nivel}" itemValue="#{enumPrioridad.idenumPrioridad}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Tipo Requerimiento" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.idenumTipoRequerimientos}">
+                            <f:selectItems value="#{enumTiporequerimientosBean.enumTiporequerimientoss}" var="enumTiporequerimientos"
+                                           itemLabel="#{enumTiporequerimientos.requerimiento}" itemValue="#{enumTiporequerimientos.idenumTipoRequerimientos}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Impacto en caso de no atender al cambio" />
+                        <h:inputTextarea  value="#{solicitudBean.solicitudSeleccionada.impactoencasodenoatenderalcambio}" style="width:500px;"/>
+
+                        <h:outputText value="Beneficios esperados" />
+                        <h:inputTextarea  value="#{solicitudBean.solicitudSeleccionada.beneficiosesperados}" style="width:500px;" />
+
+                        <h:outputText value="Sistema Antiguo" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.sistemaantiguo}">
+                            <f:selectItems value="#{sistemainformaticaBean.sistemainformaticas}" var="sistemainformatica"
+                                           itemLabel="#{sistemainformatica.nombredelsistema}" itemValue="#{sistemainformatica.idsistemainformatica}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Sistema Nuevo" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.sistemanuevo}">
+                            <f:selectItems value="#{sistemainformaticaBean.sistemainformaticas}" var="sistemainformatica"
+                                           itemLabel="#{sistemainformatica.nombredelsistema}" itemValue="#{sistemainformatica.idsistemainformatica}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Razón de cambio (Descripción)" />
+                        <p:inputTextarea value="#{solicitudBean.solicitudSeleccionada.razoncambio}" style="width:500px;"/>
+
+                        <h:outputText value="Existe afectación de la base de datos" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.existeafectaciondeladb}">
+                            <f:selectItem itemLabel="NO" itemValue="0"/>
+                            <f:selectItem itemLabel="SI" itemValue="1"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Afecta la información de la  base de datos" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.afectalainformaciondeladb}">
+                            <f:selectItem itemLabel="NO" itemValue="0"/>
+                            <f:selectItem itemLabel="SI" itemValue="1"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Requiere afectar la infraestructura de la  base de datos" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.requiereafectarlaestructuradb}">
+                            <f:selectItem itemLabel="NO" itemValue="0"/>
+                            <f:selectItem itemLabel="SI" itemValue="1"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Requiere ser parte del ciclo de desarrollo" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.requiereserparteciclodesarrollo}">
+                            <f:selectItem itemLabel="NO" itemValue="0"/>
+                            <f:selectItem itemLabel="SI" itemValue="1"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Requiere perfil del proyecto" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.requiereperfilproyecto}">
+                            <f:selectItem itemLabel="NO" itemValue="0"/>
+                            <f:selectItem itemLabel="SI" itemValue="1"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Solicitante" />
+                        <h:selectOneMenu value="#{solicitudBean.solicitudSeleccionada.idusuario}">
+                            <f:selectItems value="#{usuarioBean.usuarios}" var="usuario"
+                                           itemLabel="#{usuario.codigousuario}" itemValue="#{usuario.idusuario}"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="Fecha" />
+                        <p:calendar id="fecha" value="#{solicitudBean.solicitudSeleccionada.fecha}" 
+                                    showOn="button" pattern="yyyy-MM-dd" >
+                            <f:convertDateTime pattern="yyyy-MM-dd" />
+                        </p:calendar>
+
+                        <f:facet name="footer">
+                            <h:commandButton value="Agregar" actionListener="#{solicitudBean.agregarSolicitud}" />
+                        </f:facet>
+
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+        <h1></h1>
+        <h1></h1>
+        <h1></h1>
+        <ui:include src="footer.xhtml" />
+    </h:body>
+
+</html>
